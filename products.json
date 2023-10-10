@@ -1,0 +1,137 @@
+[
+	{
+		"id": 1,
+		"title": "Producto 1",
+		"description": "Este es un producto es el 1",
+		"price": 200,
+		"thumbnail": "sin imagen",
+		"code": "abc123",
+		"stock": 25
+	  },
+	  {
+		"id": 2,
+		"title": "Producto 2",
+		"description": "Este es un producto es el 2",
+		"price": 220,
+		"thumbnail": "imagen2.jpg",
+		"code": "def456",
+		"stock": 30
+	  },
+	  {
+		"id": 3,
+		"title": "Producto 3",
+		"description": "Este es un producto es el 3",
+		"price": 180,
+		"thumbnail": "imagen3.jpg",
+		"code": "ghi789",
+		"stock": 15
+	  },
+	  {
+		"id": 4,
+		"title": "Producto 4",
+		"description": "Este es un producto es el 4",
+		"price": 250,
+		"thumbnail": "imagen4.jpg",
+		"code": "jkl012",
+		"stock": 40
+	  },
+	  {
+		"id": 5,
+		"title": "Producto 5",
+		"description": "Este es un producto es el 5",
+		"price": 190,
+		"thumbnail": "imagen5.jpg",
+		"code": "mno345",
+		"stock": 20
+	  },
+	  {
+		"id": 6,
+		"title": "Producto 6",
+		"description": "Este es un producto es el 6",
+		"price": 280,
+		"thumbnail": "imagen6.jpg",
+		"code": "pqr678",
+		"stock": 10
+	  },
+	  {
+		"id": 7,
+		"title": "Producto 7",
+		"description": "Este es un producto es el 7",
+		"price": 210,
+		"thumbnail": "imagen7.jpg",
+		"code": "stu901",
+		"stock": 35
+	  },
+	  {
+		"id": 8,
+		"title": "Producto 8",
+		"description": "Este es un producto es el 8",
+		"price": 270,
+		"thumbnail": "imagen8.jpg",
+		"code": "vwx234",
+		"stock": 28
+	  },
+	  {
+		"id": 9,
+		"title": "Producto 9",
+		"description": "Este es un producto es el 9",
+		"price": 200,
+		"thumbnail": "imagen9.jpg",
+		"code": "yzab567",
+		"stock": 22
+	  },
+	  {
+		"id": 10,
+		"title": "Producto 10",
+		"description": "Este es un producto es el 10",
+		"price": 230,
+		"thumbnail": "imagen10.jpg",
+		"code": "cdefg890",
+		"stock": 18
+	  },
+	  {
+		"id": 11,
+		"title": "Producto 11",
+		"description": "Este es un producto es el 11",
+		"price": 240,
+		"thumbnail": "imagen11.jpg",
+		"code": "hijkl123",
+		"stock": 32
+	  },
+	  {
+		"id": 12,
+		"title": "Producto 12",
+		"description": "Este es un producto es el 12",
+		"price": 195,
+		"thumbnail": "imagen12.jpg",
+		"code": "mnopq456",
+		"stock": 19
+	  },
+	  {
+		"id": 13,
+		"title": "Producto 13",
+		"description": "Este es un producto es el 13",
+		"price": 260,
+		"thumbnail": "imagen13.jpg",
+		"code": "rstuv789",
+		"stock": 24
+	  },
+	  {
+		"id": 14,
+		"title": "Producto 14",
+		"description": "Este es un producto es el 14",
+		"price": 205,
+		"thumbnail": "imagen14.jpg",
+		"code": "wxyz012",
+		"stock": 16
+	  },
+	  {
+		"id": 15,
+		"title": "Producto 15",
+		"description": "Este es un producto es el 15",
+		"price": 225,
+		"thumbnail": "imagen15.jpg",
+		"code": "abcdef345",
+		"stock": 23
+	  }
+]
