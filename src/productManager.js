@@ -1,4 +1,5 @@
-
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 export class ProductManager {
 
     constructor(path) {
@@ -6,32 +7,35 @@ export class ProductManager {
     }
 
     async addProducts(product) {
-        const { title, description, price, thumbnail, code, stock } = product;
+        const { title, description, price, status, stock, category, thumbnail, code } = product;
         const products = await getJSONFromFile(this.path)
 
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
+        if (!title || !description || !price || !status || !stock || !category || !code) {
             throw new Error('All fields are required.');
         }
 
         // validacion de que el campo code no se repita
         let existingCode = products.find (product => product.code === code);
         if(existingCode) {
-            console.log('El codigo de producto ingresado ya existe');
-            return;
+            throw new Error('That code already exists');
         }
-
-
-        const id = products.length + 1;
-        const newProduct = { id, title, description, price, thumbnail, code, stock };
+        const id = uuidv4();
+        const newProduct = { id, title, description, price, status, stock, category, thumbnail, code };
         products.push(newProduct);
 
         return saveJSONFromFile(this.path, products)
 
     }
 
-    getProducts() {
-        return getJSONFromFile(this.path)
+    async getProducts() {
+        try {
+            return await getJSONFromFile(this.path);
+        } catch (error) {
+            console.error('Error reading products file:', error);
+            throw new Error('Unable to read products file');
+        }
     }
+
 
     async getProductsById(id) {
         const products = await getJSONFromFile(this.path)
@@ -43,7 +47,7 @@ export class ProductManager {
         return existingId
     }
 
-    async updateProduct(id, newTitle, newDescription, newPrice, newThumbnail, newCode, newStock) {
+    async updateProduct(id, newTitle, newDescription, newPrice, newStatus, newStock, newCategory, newThumbnail, newCode ) {
         const products = await getJSONFromFile(this.path)
         let existingId = products.find(product => product.id === id)
 
@@ -54,18 +58,21 @@ export class ProductManager {
             newTitle !== undefined &&
             newDescription !== undefined &&
             newPrice !== undefined &&
+            newStatus !== undefined &&
+            newStock !== undefined &&
+            newCategory !== undefined &&
             newThumbnail !== undefined &&
-            newCode !== undefined &&
-            newStock !== undefined ) {
+            newCode !== undefined) {
 
             existingId.title = newTitle;
             existingId.description = newDescription;
             existingId.price = newPrice;
+            existingId.status = newStatus;
+            existingId.stock = newStock;
+            existingId.category = newCategory;
             existingId.thumbnail = newThumbnail;
             existingId.code = newCode;
-            existingId.stock = newStock;
     
-
             await saveJSONFromFile(this.path, products);
             console.log('The product was successfully updated', existingId);
         } else {
@@ -107,41 +114,47 @@ export class ProductManager {
 
     async deleteProductsById(id) {
         const products = await getJSONFromFile(this.path)
-        let index = products.find(product => product.id === id)
+        console.log('Products before deletion:', products);
+
+        let index = products.findIndex(product => product.id === id)
 
         if (index !== 1) {
             products.splice(index, 1);
-            await saveJSONFromFile(this.path, products)
+            await saveJSONFromFile(this.path, products, 'utf-8')
             console.log('The product was successfully deleted')
+            return true
         } else {
             console.log('Sorry! We could not delete product')
+            return false
         }
 
     }
 
-
+ 
 }
 
 // Chequeo la existencia del archivo
-const existingFile = async (path) => {
-    try {
-        await fs.promises.access(path);
-        return true;
-    } catch (error) {
-        return false
-    }
-};
+// const existingFile = async (path) => {
+//     try {
+//         await fs.promises.access(path);
+//         return true;
+//     } catch (error) {
+//         return false
+//     }
+// };
 
 // Obtener JSON desde archivo
 const getJSONFromFile = async (path) => {
-    if (!await existingFile(path)) {
-        return [];
-    }
+    // if (!await existingFile(path)) {
+    //     console.log(`File not found at path: ${path}`);
+    //     return [];
+    // }
     const content = await fs.promises.readFile(path, 'utf-8');
     try {
         return JSON.parse(content);
     }
     catch (error) {
+        console.error(`Error reading file ${path}: ${error}`);
         throw new Error(`The ${path} file does not have a valid JSON format`);
     }
 
@@ -158,33 +171,8 @@ async function saveJSONFromFile(path, data) {
     }
 }
 
-const pruebaDesafio = async () => {
+const productManager = new ProductManager('../products.json');
 
-    try {
-        const productManager = new ProductManager('../products.json');
-        // await productManager.addProducts({
-        //     title: "producto prueba",
-        //     description: "Este es un producto prueba",
-        //     price: 200,
-        //     thumbnail: "sin imagen",
-        //     code: "abc123",
-        //     stock: 25,
-        // });
 
-        const products = await productManager.getProducts();
-        // console.log("getProdcuts", 'Here are the products:', products);
 
-        // productManager.getProductsById() // ingresar Id a buscar
-        // productManager.deleteProductsById() // ingresar Id a borrar
-        // productManager.updateProduct() // ingresar los valrores a actualizar por props (id que se quiere modificar, 'Nuevo Titulo', 'Nueva descripcion', 500, 'Nueva Ruta', 'NuevoCodigo123", 30)
-        // productManager.updateProductField (2,'title', 'Actualizo el titulo solamente2') // ingresar el id, el nombre y el valor a actualizar por props (id que se quiere modificar, 'title', 'Actualizo el titulo solamente' )
-        // // productManager.deleteProductsFile();
-
-    } catch (error) {
-        console.error(' Ha ocurrido un error: ', error.message)
-    }
-
-}
-
-pruebaDesafio()
 
