@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import { ProductManager } from '../productManager.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// funciona con ruta ABSOLUTA pero no con ruta relativa 
-const ruta1 = '../products.json'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ruta1 = path.join(__dirname, '../products.json');
 
 const productManager = new ProductManager(ruta1);
 

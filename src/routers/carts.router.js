@@ -1,13 +1,21 @@
 import { Router } from 'express';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 // funciona con ruta ABSOLUTA pero no con ruta relativa 
-const ruta = '../carrito.json'
+// const ruta = '/Users/antonellagatti/Desktop/Antu/CODERHOUSE/BACKEND/PreEntregas/PreEntrega1Gatti/src/carrito.json'
+const ruta = path.join(__dirname, '../carrito.json');
 
 const router = Router();
 
+// Crea un Carrito
 router.post('/carts', async (req, res) => {
     const body = req.body;
     const carts = await getJSONFromFile(ruta);
@@ -24,7 +32,7 @@ router.post('/carts', async (req, res) => {
 })
 
 
-
+// Trae el carrito x Id1
 router.get('/carts/:cid', async (req, res) => {
     const carts = await getJSONFromFile(ruta)
     const cid = req.params.cid
@@ -39,6 +47,7 @@ router.get('/carts/:cid', async (req, res) => {
     
 })
 
+// funcion para buscar carrito
 function getCartbyId(cid) {
     try {
         const carts = getJSONFromFile(ruta);
@@ -55,6 +64,12 @@ function getCartbyId(cid) {
 }
 
 
+
+
+// funcion para buscar el producto x Id
+
+
+
 router.post('/:cid/product/:pid', async (req, res) => {
     try {
         const cid = req.params.cid
@@ -68,7 +83,9 @@ router.post('/:cid/product/:pid', async (req, res) => {
         const existingCartItem = cart.products.find(item => item.product === productId);
 
         if (!existingCartItem) {
-            cart.products.push({ product: productId, quantity: 1 })
+            cart.products.push({ 
+                product: productId, 
+                quantity: 1 })
         } else {
             existingCartItem.quantity += 1;
         }
@@ -83,8 +100,6 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 
 })
-
-
 
 
 
