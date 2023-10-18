@@ -15,25 +15,26 @@ const router = Router();
 // QUERY CON LIMITS
 router.get('/products', async (req, res) => {
     try {
-        let limit = undefined
+        let limit = undefined;
         if (req.query.limit) {
-            limit = parseInt(req.query.limit);
+            limit = req.query.limit;
         }
-        const product = await productManager.getProducts(limit)
+        const products = await productManager.getProducts(limit);
+        
         if (!limit) {
-            res.json(product)
+            res.json(products);
         } else {
-            res.send(product.slice(0, limit))
+            res.json(products.slice(0, limit));
         }
-    }
-    catch (error) {
+    } catch (error) {
         res.status(400).json({ error: 'error' });
     }
-})
+});
+
 
 router.get('/products/:pid', async (req, res) => {
     try {
-        const productId = parseInt(req.params.pid)
+        const productId = req.params.pid
         const product = await productManager.getProductsById(productId)
 
         if (!product) {
@@ -63,9 +64,9 @@ router.post('/products', async (req, res) => {
 
 })
 
-router.put('/products/:pid', async (req, res) => {
+router.put('/products/  ', async (req, res) => {
     try {
-        const productId = parseInt(req.params.pid)
+        const productId = req.params.pid
         const { fieldName, newValue } = req.body;
 
         await productManager.updateProductField(productId, fieldName, newValue);
@@ -80,7 +81,7 @@ router.put('/products/:pid', async (req, res) => {
 
 router.delete('/products/:pid', async (req, res) => {
     try {
-        const productId = parseInt(req.params.pid)
+        const productId = req.params.pid
         const success = await productManager.deleteProductsById(productId)
 
         if (!success) {

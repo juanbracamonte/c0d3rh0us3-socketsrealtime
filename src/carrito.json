@@ -13,10 +13,6 @@
 	},
 	{
 		"id": "594b1886-0b01-41a6-9e9a-e0fa9b626864",
-		"products": []
-	},
-	{
-		"id": "1",
 		"products": [
 			{
 				"product": 5,
@@ -25,6 +21,22 @@
 			{
 				"product": 3,
 				"quantity": 2
+			},
+			{
+				"product": "5",
+				"quantity": 3
+			},
+			{
+				"product": "fa8d772d-1238-45b6-ab32-1ce9122ab2af",
+				"quantity": 189
+			},
+			{
+				"product": "fa8d772d-1238-45b6-ab32-1ce9122ab2ae",
+				"quantity": 1
+			},
+			{
+				"product": "fa8d772d-1238-45b6-ab32-1ce9122ab2uu",
+				"quantity": 4
 			}
 		]
 	}

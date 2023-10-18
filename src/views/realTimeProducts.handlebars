@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Products</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Real-Time Products</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody id="productList">
+                {{#each products}}
+                <tr data-product-id="{{this.id}}">
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.stock}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+   
+
+    <script>
+        const socket = io();
+        
+        socket.on('productCreated', (product) => {
+            // controlo por socket la creacion de productos para el tiempo real
+            const productList = document.getElementById('productList');
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-product-id', product.id);
+            newRow.innerHTML = `
+                <td>${product.title}</td>
+                <td>${product.description}</td>
+                <td>${product.stock}</td>
+            `;
+            productList.appendChild(newRow);
+        });
+        
+        socket.on('productDeleted', (productId) => {
+            // controlo por socket la eliminacion de productos para el tiempo real
+            const productList = document.getElementById('productList');
+            const itemToDelete = productList.querySelector(`tr[data-product-id="${productId}"]`);
+            if (itemToDelete) {
+                itemToDelete.remove();
+            }
+        });
+    </script>
+</body>
+</html>

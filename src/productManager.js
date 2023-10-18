@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { io } from './app.js';
 export class ProductManager {
 
     constructor(path) {
@@ -15,16 +16,19 @@ export class ProductManager {
         }
 
         // validacion de que el campo code no se repita
-        let existingCode = products.find (product => product.code === code);
-        if(existingCode) {
+        let existingCode = products.find(product => product.code === code);
+        if (existingCode) {
             throw new Error('That code already exists');
         }
         const id = uuidv4();
         const newProduct = { id, title, description, price, status, stock, category, thumbnail, code };
         products.push(newProduct);
 
-        return saveJSONFromFile(this.path, products)
+        await saveJSONFromFile(this.path, products);
 
+        io.emit('productCreated', newProduct);
+
+        return newProduct;
     }
 
     async getProducts() {
@@ -47,7 +51,7 @@ export class ProductManager {
         return existingId
     }
 
-    async updateProduct(id, newTitle, newDescription, newPrice, newStatus, newStock, newCategory, newThumbnail, newCode ) {
+    async updateProduct(id, newTitle, newDescription, newPrice, newStatus, newStock, newCategory, newThumbnail, newCode) {
         const products = await getJSONFromFile(this.path)
         let existingId = products.find(product => product.id === id)
 
@@ -72,7 +76,7 @@ export class ProductManager {
             existingId.category = newCategory;
             existingId.thumbnail = newThumbnail;
             existingId.code = newCode;
-    
+
             await saveJSONFromFile(this.path, products);
             console.log('The product was successfully updated', existingId);
         } else {
@@ -84,15 +88,15 @@ export class ProductManager {
     async updateProductField(id, fieldName, newValue) {
         const products = await getJSONFromFile(this.path);
         const existingId = products.find(product => product.id === id);
-    
+
         if (!existingId) {
             console.error('Sorry! We did not find that id');
             return null;
         }
-    
+
         if (fieldName in existingId) {
             existingId[fieldName] = newValue;
-    
+
             await saveJSONFromFile(this.path, products);
             console.log(`The ${fieldName} of the product with ID ${id} was successfully updated to ${newValue}`);
         } else {
@@ -113,24 +117,19 @@ export class ProductManager {
     }
 
     async deleteProductsById(id) {
-        const products = await getJSONFromFile(this.path)
-        console.log('Products before deletion:', products);
+        const products = await getJSONFromFile(this.path);
+        const updatedProducts = products.filter(product => String(product.id) !== id); // 
 
-        let index = products.findIndex(product => product.id === id)
-
-        if (index !== 1) {
-            products.splice(index, 1);
-            await saveJSONFromFile(this.path, products, 'utf-8')
-            console.log('The product was successfully deleted')
-            return true
+        if (products.length > updatedProducts.length) {
+            await saveJSONFromFile(this.path, updatedProducts, 'utf-8');
+            console.log('The product was successfully deleted');
+            io.emit('productDeleted', id); 
+            return true;
         } else {
-            console.log('Sorry! We could not delete product')
-            return false
+            console.log('Sorry! We could not delete product');
+            return false;
         }
-
     }
-
- 
 }
 
 // Chequeo la existencia del archivo
